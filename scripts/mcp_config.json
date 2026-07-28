@@ -11,6 +11,7 @@
   "google-calendar": {
     "command": "npx",
     "args": [
+      "-y",
       "@cocal/google-calendar-mcp"
     ],
     "env": {
