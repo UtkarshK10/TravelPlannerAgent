@@ -1,16 +1,58 @@
 import asyncio
+import json
+import os
 import threading
 from pathlib import Path
 
 import streamlit as st
 from dotenv import load_dotenv
 
-from travelPlannerAgent_mcp import plan_trip
-
 
 ROOT_DIR = Path(__file__).resolve().parent
 ENV_PATH = ROOT_DIR / "scripts" / ".env"
 load_dotenv(ENV_PATH)
+
+
+def hydrate_streamlit_secrets():
+    try:
+        secrets = st.secrets
+    except FileNotFoundError:
+        return
+
+    for key in ("GOOGLE_API_KEY", "WEATHER_API_KEY", "LANGSMITH_API_KEY"):
+        if key in secrets:
+            os.environ[key] = str(secrets[key])
+
+    write_json_secret(
+        "GOOGLE_OAUTH_CREDENTIALS_JSON",
+        Path("/tmp/gcp-oauth.keys.json"),
+        "GOOGLE_OAUTH_CREDENTIALS",
+    )
+    write_json_secret(
+        "GOOGLE_CALENDAR_MCP_TOKENS_JSON",
+        Path("/tmp/google-calendar-mcp-tokens.json"),
+        "GOOGLE_CALENDAR_MCP_TOKEN_PATH",
+    )
+
+    if "google_oauth_credentials" in secrets:
+        oauth_path = Path("/tmp/gcp-oauth.keys.json")
+        oauth_payload = dict(secrets["google_oauth_credentials"])
+        oauth_path.write_text(json.dumps(oauth_payload), encoding="utf-8")
+        os.environ["GOOGLE_OAUTH_CREDENTIALS"] = str(oauth_path)
+
+
+def write_json_secret(secret_name, path, env_name):
+    if secret_name not in st.secrets:
+        return
+
+    secret_value = st.secrets[secret_name]
+    if isinstance(secret_value, str):
+        payload = json.loads(secret_value)
+    else:
+        payload = dict(secret_value)
+
+    path.write_text(json.dumps(payload), encoding="utf-8")
+    os.environ[env_name] = str(path)
 
 
 st.set_page_config(
@@ -19,6 +61,10 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+
+hydrate_streamlit_secrets()
+
+from travelPlannerAgent_mcp import plan_trip
 
 
 st.markdown(

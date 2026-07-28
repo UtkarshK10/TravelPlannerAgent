@@ -14,7 +14,8 @@
       "@cocal/google-calendar-mcp"
     ],
     "env": {
-      "GOOGLE_OAUTH_CREDENTIALS": "${GOOGLE_OAUTH_CREDENTIALS}"
+      "GOOGLE_OAUTH_CREDENTIALS": "${GOOGLE_OAUTH_CREDENTIALS}",
+      "GOOGLE_CALENDAR_MCP_TOKEN_PATH": "${GOOGLE_CALENDAR_MCP_TOKEN_PATH}"
     },
     "transport": "stdio"
   }

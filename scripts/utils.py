@@ -12,6 +12,19 @@ def expand_env_values(value):
     return value
 
 
+def remove_unset_env_values(config):
+    for server_config in config.values():
+        env = server_config.get("env")
+        if not isinstance(env, dict):
+            continue
+        server_config["env"] = {
+            key: value
+            for key, value in env.items()
+            if not (isinstance(value, str) and value.startswith("${") and value.endswith("}"))
+        }
+    return config
+
+
 # -------------------------
 # MCP Config Loader
 # -------------------------
@@ -19,7 +32,7 @@ def load_mcp_config(*server_names):
     config_path = os.path.join(os.path.dirname(__file__), 'mcp_config.json')
 
     with open(config_path, 'r') as f:
-        all_configs = expand_env_values(json.load(f))
+        all_configs = remove_unset_env_values(expand_env_values(json.load(f)))
 
     if len(server_names)==0:
         return all_configs
