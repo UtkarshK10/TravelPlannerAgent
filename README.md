@@ -10,10 +10,10 @@ Steps to run this project
 
 Requirements:
 
-GOOGLE_API_KEY
-WEATHER_API_KEY
-OLLAMA_API_KEY
-LANGSMITH_API_KEY
+1. GOOGLE_API_KEY
+2. WEATHER_API_KEY
+3. OLLAMA_API_KEY
+4. LANGSMITH_API_KEY
 
 <img width="1470" height="792" alt="Screenshot 2026-07-28 at 6 42 02 PM" src="https://github.com/user-attachments/assets/06f46bc5-1324-4e3b-8823-cd531c38f211" />
 
