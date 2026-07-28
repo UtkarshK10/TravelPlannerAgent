@@ -1,0 +1,26 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+.streamlit/secrets.toml
+*.keys.json
+*oauth*.json
+tokens.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local/editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Logs and runtime output
+*.log
+.pytest_cache/
